@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shanmathi A — Frontend Web Developer</title>
+<meta name="description" content="Shanmathi A — Frontend Web Developer building EHR &amp; healthcare web applications with React and JavaScript." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --panel:#141414;
+    --panel-2:#1b1b1b;
+    --line:#2c2c2c;
+    --line-soft:#232323;
+    --white:#ffffff;
+    --gray:#9a9a9a;
+    --gray-dim:#6b6b6b;
+    --maxw:1320px;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Sora',sans-serif;font-weight:700;margin:0;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--white);color:#000;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;}
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--white);
+    outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+
+  .app{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:64px 32px 40px;
+    display:grid;
+    grid-template-columns:420px 1fr;
+    gap:60px;
+    min-height:100vh;
+    align-items:start;
+  }
+
+  /* ---------------- LEFT COLUMN ---------------- */
+  .side{
+    position:sticky;
+    top:64px;
+  }
+  .side h1{
+    font-size:clamp(2.4rem, 4vw, 3rem);
+    line-height:1.12;
+    margin-bottom:22px;
+  }
+  .side h1 .name{display:block;}
+  .side .intro{
+    color:var(--gray);
+    font-size:15px;
+    max-width:400px;
+    margin-bottom:44px;
+  }
+  .side .intro strong{color:var(--white);font-weight:600;}
+
+  .side-nav{list-style:none;margin:0 0 44px;padding:0;display:flex;flex-direction:column;gap:18px;}
+  .side-nav li{display:flex;align-items:center;gap:14px;}
+  .side-nav button{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:none;
+    border:none;
+    color:var(--gray-dim);
+    padding:0;
+    font-size:13px;
+    letter-spacing:0.14em;
+    font-weight:600;
+    font-family:'Inter',sans-serif;
+    transition:color .25s ease;
+  }
+  .side-nav .idx{font-size:12px;color:inherit;width:20px;flex-shrink:0;}
+  .side-nav .rule{
+    height:1px;
+    width:26px;
+    background:var(--gray-dim);
+    transition:width .3s ease, background .3s ease;
+    flex-shrink:0;
+  }
+  .side-nav button:hover{color:var(--gray);}
+  .side-nav button:hover .rule{background:var(--gray);}
+  .side-nav button.active{color:var(--white);}
+  .side-nav button.active .rule{width:56px;background:var(--white);}
+
+  .side-socials{
+    display:flex;
+    gap:28px;
+    margin-bottom:34px;
+  }
+  .side-socials a{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:var(--gray);
+    font-size:14px;
+    font-weight:500;
+    transition:color .2s ease, transform .2s ease;
+  }
+  .side-socials a:hover{color:var(--white); transform:translateY(-2px);}
+  .side-socials svg{width:18px;height:18px;flex-shrink:0;}
+
+  .side-cta{
+    display:none;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .side-cta.show{display:flex;}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    border:1px solid var(--white);
+    color:var(--white);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:0.12em;
+    background:none;
+    transition:background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .btn:hover{background:var(--white); color:#000; transform:translateY(-2px);}
+  .btn.solid{background:var(--white); color:#000;}
+  .btn.solid:hover{background:transparent; color:var(--white);}
+
+  /* -------- hover-expand link (Humworld etc.) -------- */
+  .link-hover{
+    position:relative;
+    color:var(--white);
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .link-hover::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-2px;
+    height:1px;
+    width:0;
+    background:var(--white);
+    transition:width .35s ease;
+  }
+  .link-hover:hover::after,
+  .link-hover:focus-visible::after{
+    width:100%;
+  }
+
+  /* ---------------- RIGHT COLUMN ---------------- */
+  .stage{min-height:560px;}
+  .panel{display:none;}
+  .panel.active{display:block; animation:fade .5s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+
+  /* -------- per-section reveal animations -------- */
+  .reveal{
+    opacity:0;
+    transition:opacity .6s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1), filter .6s ease;
+  }
+  .reveal.r-scale{transform:scale(.86); filter:blur(2px);}
+  .reveal.r-fade{transform:translateY(26px);}
+  .reveal.r-left{transform:translateX(-46px);}
+  .reveal.r-right{transform:translateX(46px);}
+  .reveal.r-pop{transform:scale(.7); transition-timing-function:cubic-bezier(.34,1.56,.64,1);}
+  .reveal.r-up{transform:translateY(40px) scale(.96);}
+  .reveal.r-rotate{transform:translateY(16px) rotate(-4deg);}
+
+  .reveal.show{
+    opacity:1;
+    transform:none;
+    filter:none;
+  }
+
+  /* ABOUT */
+  .about-photo{
+    width:100%;
+    max-width:260px;
+    aspect-ratio:3/4;
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:20px;
+    margin:0 auto 28px;
+    filter:grayscale(15%);
+  }
+  .about-photo img{width:100%;height:100%;object-fit:cover;}
+  .about-text{
+    color:var(--gray);
+    font-size:15.5px;
+    max-width:640px;
+    margin-bottom:20px;
+  }
+  .about-text:last-of-type{margin-bottom:36px;}
+  .about-text strong{color:var(--white);font-weight:600;}
+
+  .mobile-cta{display:none;}
+
+  /* PROJECTS / EDUCATION / RECOGNITION shared card list */
+  .stack{display:flex;flex-direction:column;gap:0;}
+  .row-item{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:24px;
+    position:relative;
+    padding-bottom:44px;
+  }
+  .rail{
+    position:relative;
+    display:flex;
+    justify-content:center;
+  }
+  .rail::before{
+    content:"";
+    position:absolute;
+    top:64px; bottom:-44px;
+    width:3px;
+    background:var(--white);
+  }
+  .row-item:last-child{padding-bottom:44px;}
+  .node{
+    width:64px;height:64px;
+    border-radius:50%;
+    border:3px solid var(--white);
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    z-index:1;
+  }
+  .node svg{width:26px;height:26px;stroke:var(--white);}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    padding:26px 28px;
+    border-bottom:3px solid var(--white);
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .card:hover{transform:translateX(4px);}
+  .card .when{
+    font-size:12px;
+    letter-spacing:0.08em;
+    color:var(--gray-dim);
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .card h3{font-size:1.2rem; margin-bottom:6px;}
+  .card .org{color:var(--gray); font-size:14px; margin-bottom:14px;}
+  .card .org.tight{margin-bottom:4px;}
+  .card p{color:var(--gray); font-size:14px; margin:0 0 4px;}
+  .card ul{margin:14px 0 0; padding-left:18px; color:var(--gray); font-size:14px;}
+  .card li{margin-bottom:9px;}
+  .card li:last-child{margin-bottom:0;}
+  .card li strong{color:var(--white); font-weight:600;}
+  .card .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .tag{
+    font-size:11.5px;
+    letter-spacing:0.04em;
+    padding:5px 11px;
+    border:1px solid var(--line);
+    color:var(--gray);
+  }
+  .card a.link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:18px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--white);
+    border-bottom:1px solid var(--white);
+    padding-bottom:2px;
+  }
+
+  /* ---------------- ALTERNATING TIMELINE (Experience + Academic Projects) ---------------- */
+  .timeline{
+    position:relative;
+    padding:4px 0;
+  }
+  .tl-line{
+    position:absolute;
+    left:50%;
+    top:0; bottom:0;
+    width:4px;
+    background:var(--white);
+    transform:translateX(-50%);
+  }
+  .tl-item{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 64px 1fr;
+    align-items:center;
+    gap:28px;
+    margin-bottom:52px;
+  }
+  .tl-item:last-child{margin-bottom:0;}
+  .tl-node{
+    grid-column:2;
+    width:64px;height:64px;
+    border-radius:50%;
+    border:4px solid var(--white);
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    z-index:1;
+  }
+  .tl-node svg{width:26px;height:26px;stroke:var(--white);}
+  .tl-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-bottom:3px solid var(--white);
+    padding:24px 26px;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .tl-card:hover{transform:translateY(-4px);}
+  .tl-card h3{font-size:1.15rem; margin-bottom:6px;}
+  .tl-card .org{color:var(--gray); font-size:14px; margin:0;}
+  .tl-card p{color:var(--gray); font-size:14px; margin:10px 0 0;}
+  .tl-card ul{margin:14px 0 0; padding-left:18px; color:var(--gray); font-size:14px; text-align:left;}
+  .tl-card li{margin-bottom:9px;}
+  .tl-card li:last-child{margin-bottom:0;}
+  .tl-card li strong{color:var(--white); font-weight:600;}
+  .tl-card .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .tl-item.right .tl-card .tags{justify-content:flex-end;}
+  .tl-item.left .tl-card .tags{justify-content:flex-start;}
+  .tl-card a.link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:16px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--white);
+    border-bottom:1px solid var(--white);
+    padding-bottom:2px;
+  }
+  .tl-date{
+    font-size:12.5px;
+    letter-spacing:0.08em;
+    color:var(--gray-dim);
+    font-weight:700;
+  }
+  .tl-date.mobile-only{display:none;}
+
+  .tl-item.right .tl-card{grid-column:1; justify-self:end; text-align:right; max-width:100%;}
+  .tl-item.right .tl-card ul{text-align:left;}
+  .tl-item.right .tl-date{grid-column:3; justify-self:start;}
+
+  .tl-item.left .tl-card{grid-column:3; justify-self:start;}
+  .tl-item.left .tl-date{grid-column:1; justify-self:end; text-align:right;}
+
+  /* SKILLS grid */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:18px;
+  }
+  .skill-tile{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:38px 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    text-align:center;
+    transition:background .2s ease, transform .2s ease, border-color .2s ease;
+  }
+  .skill-tile:hover{background:var(--panel-2); transform:translateY(-3px); border-color:#3a3a3a;}
+  .skill-tile .icon-wrap{width:40px;height:40px;display:flex;align-items:center;justify-content:center;}
+  .skill-tile svg{width:38px;height:38px;display:block;}
+  .skill-tile span{font-size:13px;letter-spacing:0.04em;color:var(--gray);font-weight:500;}
+
+  .stage-heading{
+    font-size:12px;
+    letter-spacing:0.16em;
+    color:var(--gray-dim);
+    font-weight:700;
+    margin-bottom:28px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .stage-heading::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  /* ---------------- RESPONSIVE ---------------- */
+  @media (max-width:980px){
+    .app{grid-template-columns:1fr; gap:40px; padding:32px 22px 60px;}
+    .side{position:static;}
+    /* All sections are already stacked in order on mobile, so the
+       numbered jump-nav isn't needed there — desktop keeps it. */
+    .side-nav{display:none;}
+    .row-item{grid-template-columns:48px 1fr; gap:16px;}
+    .node{width:48px;height:48px;}
+    .node svg{width:21px;height:21px;}
+    .rail::before{top:48px; bottom:-44px;}
+    .skills-grid{grid-template-columns:repeat(2, 1fr);}
+    .about-photo{max-width:200px; border-radius:16px;}
+
+    /* On mobile every section is shown at once, stacked in page order:
+       topic heading -> its content -> next topic heading -> its content, etc. */
+    .panel{display:block !important; margin-bottom:64px;}
+    .panel:last-child{margin-bottom:0;}
+
+    /* Desktop-only CTA (in the sticky sidebar) is hidden on mobile;
+       a copy is shown right under the About content instead. */
+    .side-cta.desktop-cta{display:none !important;}
+    .mobile-cta{display:flex !important; margin-top:8px;}
+
+    /* timeline collapses to single rail on mobile */
+    .tl-line{left:24px;}
+    .tl-item{grid-template-columns:48px 1fr; gap:16px; margin-bottom:44px;}
+    .tl-node{width:48px;height:48px; grid-column:1; grid-row:1;}
+    .tl-node svg{width:21px;height:21px;}
+    .tl-item.right .tl-card,
+    .tl-item.left .tl-card{grid-column:2; grid-row:2; justify-self:start; text-align:left; max-width:none;}
+    .tl-item.right .tl-card ul,
+    .tl-item.left .tl-card ul{text-align:left;}
+    .tl-item.right .tl-card .tags,
+    .tl-item.left .tl-card .tags{justify-content:flex-start;}
+    .tl-item.right .tl-date,
+    .tl-item.left .tl-date{display:none;}
+    .tl-date.mobile-only{
+      display:block;
+      grid-column:2; grid-row:1;
+      justify-self:start;
+      margin-bottom:6px;
+    }
+  }
+  @media (max-width:520px){
+    .skills-grid{grid-template-columns:repeat(1, 1fr);}
+    .side h1{font-size:2rem;}
+    .card{padding:20px;}
+    .tl-card{padding:20px;}
+    .btn{padding:13px 20px;font-size:11.5px;}
+    .about-photo{max-width:170px; border-radius:14px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- LEFT SIDE -->
+  <aside class="side">
+    <h1><span class="name">Hi! This is<br>Shanmathi A</span></h1>
+    <p class="intro">I'm a Junior End Developer who turns complex workflows into web experiences that feel simple. I currently build React-based applications at <a class="link-hover" href="https://humworld.com/" target="_blank" rel="noopener">Humworld Services</a>, shipping healthcare tools used by real clinicians and patients every day — from real-time analytics dashboards to interfaces connecting mobile apps and IoT devices with the people who depend on them.</p>
+
+    <ul class="side-nav" id="sideNav">
+      <li><button data-target="about" class="active"><span class="idx">01</span><span class="rule"></span>ABOUT ME</button></li>
+      <li><button data-target="experience"><span class="idx">02</span><span class="rule"></span>EXPERIENCE</button></li>
+      <li><button data-target="skills"><span class="idx">03</span><span class="rule"></span>SKILLS</button></li>
+      <li><button data-target="projects"><span class="idx">04</span><span class="rule"></span>PROJECTS</button></li>
+      <li><button data-target="academic"><span class="idx">05</span><span class="rule"></span>ACADEMIC PROJECTS</button></li>
+      <li><button data-target="education"><span class="idx">06</span><span class="rule"></span>EDUCATION</button></li>
+      <li><button data-target="recognition"><span class="idx">07</span><span class="rule"></span>RECOGNITION</button></li>
+    </ul>
+
+    <div class="side-socials">
+      <a href="https://www.linkedin.com/in/shanmathia/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/shanmathi30" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.93c.57.1.79-.25.79-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        GitHub
+      </a>
+    </div>
+
+    <div class="side-cta show desktop-cta" id="sideCta">
+      <a class="btn solid" id="resumeBtn" href="#" target="_blank" rel="noopener">RESUME</a>
+      <a class="btn" href="mailto:shanmathianbu2@gmail.com">SAY HELLO 👋</a>
+    </div>
+  </aside>
+
+  <!-- RIGHT STAGE -->
+  <main class="stage">
+
+    <!-- 01. ABOUT -->
+    <section class="panel active" id="about">
+      <div class="stage-heading">ABOUT ME</div>
+      <div class="about-photo reveal r-scale">
+        <img src="image/photo.webp" alt="image/photo.png" />
+      </div>
+      <p class="about-text reveal r-scale">I'm a Junior Web Developer with close to two years of hands-on experience building products people actually rely on — most recently a U.S. healthcare platform used daily by clinicians and patients. I like taking complicated workflows and turning them into interfaces that feel obvious to use.</p>
+      <p class="about-text reveal r-scale">Working primarily in <strong>React</strong> and <strong>JavaScript</strong>, I've shipped everything from real-time video consultations to care plan management and patient messaging tools, collaborating closely with backend and product teams to get the details right. I care about writing code that's clean today and easy to build on tomorrow.</p>
+      <p class="about-text reveal r-scale">Outside of work, I bring the same curiosity to everything else — exploring new places, trying new food, and always looking for the next thing to learn.</p>
+      <div class="side-cta mobile-cta">
+        <a class="btn solid" href="#" target="_blank" rel="noopener" onclick="document.getElementById('resumeBtn').click(); return false;">RESUME</a>
+        <a class="btn" href="mailto:shanmathianbu2@gmail.com">SAY HELLO 👋</a>
+      </div>
+    </section>
+
+    <!-- 02. EXPERIENCE (alternating timeline) -->
+    <section class="panel" id="experience">
+      <div class="stage-heading">CAREER TIMELINE</div>
+      <div class="timeline">
+        <div class="tl-line"></div>
+
+        <div class="tl-item right">
+          <div class="tl-date mobile-only">FEB 2025 — PRESENT</div>
+          <div class="tl-card reveal r-right">
+            <h3>Junior Web Developer</h3>
+            <div class="org"><a class="link-hover" href="https://humworld.com/" target="_blank" rel="noopener">Humworld Service Private Limited</a> · Chennai, Tamil Nadu</div>
+          </div>
+          <div class="tl-node">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div class="tl-date">FEB 2025 &nbsp;—&nbsp; PRESENT</div>
+        </div>
+
+        <div class="tl-item left">
+          <div class="tl-date mobile-only">DEC 2024 — FEB 2025</div>
+          <div class="tl-date">DEC 2024 &nbsp;—&nbsp; FEB 2025</div>
+          <div class="tl-node">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg>
+          </div>
+          <div class="tl-card reveal r-left">
+            <h3>Web Developer Intern</h3>
+            <div class="org"><a class="link-hover" href="https://humworld.com/" target="_blank" rel="noopener">Humworld Service Private Limited</a> · Chennai, Tamil Nadu</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. SKILLS -->
+    <section class="panel" id="skills">
+      <div class="stage-heading">TOOLS &amp; TECHNOLOGY</div>
+      <div class="skills-grid">
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="2.2"/><ellipse cx="12" cy="12" rx="10" ry="4.2"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)"/></svg>
+          <span>React.js</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 40 40"><rect x="2" y="2" width="36" height="36" rx="7" fill="none" stroke="#ffffff" stroke-width="2.2"/><text x="20" y="27" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">JS</text></svg>
+          <span>JavaScript</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg>
+          <span>HTML5</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.351l5.373-1.443L18.59 4.413z"/></svg>
+          <span>CSS3</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M9 8c-2 1-2 7 0 8M15 8c2 1 2 7 0 8"/><path d="M6 12h12"/></svg>
+          <span>jQuery</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 40 40"><rect x="2" y="2" width="36" height="36" rx="7" fill="none" stroke="#ffffff" stroke-width="2.2"/><text x="20" y="27" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="700" fill="#ffffff">B</text></svg>
+          <span>Bootstrap</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M9 3s-2 2 0 4-2 2 0 4"/><path d="M6 12s-2 6 6 6 6-6 6-6"/><path d="M8 18s-1 2 4 2 4-2 4-2"/></svg>
+          <span>Java</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="4" r="1.8"/><circle cx="5" cy="19" r="1.8"/><circle cx="19" cy="19" r="1.8"/><path d="M12 6v6M12 12l-6 6M12 12l6 6"/></svg>
+          <span>Git</span>
+        </div>
+        <div class="skill-tile reveal r-pop">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.93c.57.1.79-.25.79-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+          <span>GitHub</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. PROJECTS -->
+    <section class="panel" id="projects">
+      <div class="stage-heading">SELECTED WORK</div>
+      <div class="stack">
+        <div class="row-item reveal r-fade">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="when">FEB 2025 &nbsp;—&nbsp; PRESENT</div>
+            <h3>Humhealth EHR Project</h3>
+            <div class="org"><a class="link-hover" href="https://humworld.com/" target="_blank" rel="noopener">Humworld Service Private Limited</a></div>
+            <p>Owned the front-end build of two core modules on this U.S. healthcare EHR platform:</p>
+            <ul>
+              <li><strong>Appointments</strong> — built end-to-end scheduling workflows enabling patients and providers to book, manage, and track visits in real time.</li>
+              <li><strong>Patient Education</strong> — delivered learning content directly within the platform to help patients understand and stay engaged with their care.</li>
+            </ul>
+            <div class="tags"><span class="tag">HTML/CSS</span><span class="tag">React</span><span class="tag">JavaScript</span><span class="tag">JQuery</span><span class="tag">Java</span><span class="tag">REST APIs</span></div>
+          </div>
+        </div>
+        <div class="row-item reveal r-fade">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="when">FEB 2025 &nbsp;—&nbsp; PRESENT</div>
+            <h3>Humhealth Application</h3>
+            <div class="org"><a class="link-hover" href="https://humworld.com/" target="_blank" rel="noopener">Humworld Service Private Limited</a></div>
+            <p>Built and maintained several core modules across the platform:</p>
+            <ul>
+              <li><strong>Bulk Care Plan Configuration</strong> — enabling providers to configure and apply care plans at scale.</li>
+              <li><strong>Reports</strong> — surfacing key clinical and operational data for care teams.</li>
+              <li><strong>Message Center</strong> — secure messaging between patients and providers.</li>
+              <li><strong>User Management</strong> — creating and managing patient and provider accounts.</li>
+              <li><strong>Provider Guidance</strong> — reference workflows supporting clinical staff.</li>
+              <li><strong>Patient Notes</strong> — structured note-taking for patient visits.</li>
+              <li><strong>Device Orders</strong> — ordering and tracking connected health devices.</li>
+            </ul>
+            <div class="tags"><span class="tag">HTML/CSS</span><span class="tag">React</span><span class="tag">JavaScript</span><span class="tag">JQuery</span><span class="tag">Java</span><span class="tag">REST APIs</span></div>
+          </div>
+        </div>
+        <div class="row-item reveal r-fade">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v5"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="when">DEC 2024 &nbsp;—&nbsp; FEB 2025</div>
+            <h3>Super Market Management System</h3>
+            <div class="org">Personal project — built during internship</div>
+            <p>A mini project built to strengthen practical web development skills — covering core CRUD workflows, UI structure, and everyday store-management logic from the ground up.</p>
+            <div class="tags"><span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">JavaScript</span></div>
+            <a class="link" href="https://github.com/Shanmathi30/Super-Market-Management" target="_blank" rel="noopener">View on GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. ACADEMIC PROJECTS (alternating timeline) -->
+    <section class="panel" id="academic">
+      <div class="stage-heading">ACADEMIC PROJECTS</div>
+      <div class="timeline">
+        <div class="tl-line"></div>
+
+        <div class="tl-item right">
+          <div class="tl-date mobile-only">WORDPRESS</div>
+          <div class="tl-card reveal r-right">
+            <h3>Digital Marketing</h3>
+            <div class="org">Website built and promoted using WordPress</div>
+            <div class="tags"><span class="tag">WordPress</span><span class="tag">NewLetters</span><span class="tag">Blog</span><span class="tag">Adveristment</span></div>
+            <a class="link" href="https://github.com/Shanmathi30/DigitalMarketing-DM-" target="_blank" rel="noopener">View on GitHub ↗</a>
+          </div>
+          <div class="tl-node">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5c2.6 2.6 4 6 4 9.5s-1.4 6.9-4 9.5c-2.6-2.6-4-6-4-9.5s1.4-6.9 4-9.5z"/></svg>
+          </div>
+          <div class="tl-date">WORDPRESS</div>
+        </div>
+
+        <div class="tl-item left">
+          <div class="tl-date mobile-only">MINI PROJECT</div>
+          <div class="tl-date">MINI PROJECT</div>
+          <div class="tl-node">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 3h6"/><path d="M10 3v5.2L4.8 17a2.4 2.4 0 0 0 2.1 3.6h10.2a2.4 2.4 0 0 0 2.1-3.6L14 8.2V3"/><path d="M7.5 15h9"/></svg>
+          </div>
+          <div class="tl-card reveal r-left">
+            <h3>Drug Traceability</h3>
+            <div class="org">End-to-end medicine tracking system</div>
+            <p>Traces a drug's journey from manufacturer to patient to help verify authenticity and curb counterfeit medicine.</p>
+            <a class="link" href="https://github.com/Shanmathi30/mini-project" target="_blank" rel="noopener">View on GitHub ↗</a>
+          </div>
+        </div>
+
+        <div class="tl-item right">
+          <div class="tl-date mobile-only">MAIN PROJECT</div>
+          <div class="tl-card reveal r-right">
+            <h3>Kidney Stone Detection</h3>
+            <div class="org">Image-based detection system</div>
+            <p>Analyzing scan images to help detect the presence of kidney stones.</p>
+            <a class="link" href="https://github.com/Shanmathi30/Main-Project" target="_blank" rel="noopener">View on GitHub ↗</a>
+          </div>
+          <div class="tl-node">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M8 3c-2.5 1-4 4-4 8 0 6 3 10 5 10s2-3 2-5-1-3-1-6c0-3 1-5 3-6"/><circle cx="14.5" cy="10.5" r="1.6"/></svg>
+          </div>
+          <div class="tl-date">MAIN PROJECT</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. EDUCATION -->
+    <section class="panel" id="education">
+      <div class="stage-heading">EDUCATION</div>
+      <div class="stack">
+        <div class="row-item reveal r-up">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Ganadhipathy Tulsi's Jain Engineering College</h3>
+            <div class="org tight">B.E - Computer Science Engineering, 2020 - 2024</div>
+            <div class="org tight">Kaniyambadi, Tamil Nadu</div>
+            <div class="org">CGPA - 8.75</div>
+          </div>
+        </div>
+
+        <div class="row-item reveal r-up">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Shri Bala Vidhya Mandir Matric Hr Sec School</h3>
+            <div class="org tight">HSC - 2020</div>
+            <div class="org tight">Arni, Tamil Nadu</div>
+            <div class="org">Percentage - 71%</div>
+          </div>
+        </div>
+
+        <div class="row-item reveal r-up">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <h3>St. Joseph's Matriculation School</h3>
+            <div class="org tight">SSLC - 2018</div>
+            <div class="org tight">Arni, Tamil Nadu</div>
+            <div class="org">Percentage - 93.6%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07. RECOGNITION -->
+    <section class="panel" id="recognition">
+      <div class="stage-heading">RECOGNITION</div>
+      <div class="stack">
+        <div class="row-item reveal r-rotate">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l3 6 6 .9-4.5 4.3 1 6-5.5-3-5.5 3 1-6L3 8.9 9 8z"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="when">ACHIEVEMENT</div>
+            <h3>Mentored and trained juniors in JavaScript</h3>
+          </div>
+        </div>
+
+        <div class="row-item reveal r-rotate">
+          <div class="rail">
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l3 6 6 .9-4.5 4.3 1 6-5.5-3-5.5 3 1-6L3 8.9 9 8z"/></svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="when">ACHIEVEMENT</div>
+            <h3>Rapid development of EHR modules</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // ---- CONFIGURE THIS: paste your Google Drive share link for the resume PDF ----
+  const RESUME_URL = "https://drive.google.com/file/d/10_TF_maCdV9ZPmxCPNXPXULmAVGxZNKA/view?usp=sharing";
+  document.getElementById('resumeBtn').setAttribute('href', RESUME_URL);
+  // keep the mobile "resume" button pointed at the same link
+  document.querySelectorAll('.mobile-cta .btn.solid').forEach(el => el.setAttribute('href', RESUME_URL));
+
+  const navButtons = document.querySelectorAll('#sideNav button');
+  const panels = document.querySelectorAll('.panel');
+  const sideCta = document.getElementById('sideCta');
+
+  function isMobile(){
+    return window.matchMedia('(max-width:980px)').matches;
+  }
+
+  // Stagger-reveal every .reveal element inside a panel.
+  // Each element keeps its own r-* motion class, so every section animates differently.
+  function revealPanel(panel){
+    if(!panel) return;
+    const items = panel.querySelectorAll('.reveal');
+    items.forEach((el, i) => {
+      el.classList.remove('show');
+      // force reflow so the transition re-triggers every time
+      void el.offsetWidth;
+      setTimeout(() => el.classList.add('show'), 90 * i);
+    });
+  }
+
+  function revealAllPanels(){
+    panels.forEach(p => revealPanel(p));
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      const targetPanel = document.getElementById(target);
+
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (isMobile()) {
+        // On mobile every section is already visible and stacked in order —
+        // clicking a nav item just scrolls smoothly to that section.
+        targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        panels.forEach(p => p.classList.toggle('active', p.id === target));
+        sideCta.classList.toggle('show', target === 'about');
+        revealPanel(targetPanel);
+      }
+    });
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (isMobile()) {
+      revealAllPanels();
+    } else {
+      revealPanel(document.getElementById('about'));
+    }
+  });
+
+  // re-reveal everything if the viewport crosses into the mobile breakpoint
+  let wasMobile = isMobile();
+  window.addEventListener('resize', () => {
+    const nowMobile = isMobile();
+    if (nowMobile && !wasMobile) {
+      revealAllPanels();
+    }
+    wasMobile = nowMobile;
+  });
+</script>
+
+</body>
+</html>
